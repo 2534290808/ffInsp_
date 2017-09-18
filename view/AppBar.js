@@ -2,7 +2,7 @@
  * Created by lmy2534290808 on 2017/9/11.
  */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text,StatusBar} from 'react-native';
+import {StyleSheet, View, Text,StatusBar,Modal} from 'react-native';
 import PropTypes from 'prop-types';
 import {Toolbar,COLOR} from 'react-native-material-ui';
 import Util from '../view/Util';

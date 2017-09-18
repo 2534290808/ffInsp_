@@ -3,12 +3,14 @@ package com.ffinsp_;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
+import it.innove.BleManagerPackage;
+import com.lwansbrough.RCTCamera.RCTCameraPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
-
+import org.pgsqlite.SQLitePluginPackage;
 import java.util.Arrays;
 import java.util.List;
 
@@ -24,7 +26,9 @@ public class MainApplication extends Application implements ReactApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new VectorIconsPackage()
+            new BleManagerPackage(),
+            new RCTCameraPackage(),
+            new VectorIconsPackage(),new SQLitePluginPackage()
       );
     }
   };

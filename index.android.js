@@ -15,6 +15,7 @@ import PropTypes from 'prop-types';
 import {ThemeProvider, COLOR} from 'react-native-material-ui';
 import App from "./App";
 import Util from './view/Util';
+import AppTest from "./AppTest";
 const uiTheme = {
     palette: {
         primaryColor: COLOR.cyan500

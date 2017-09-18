@@ -3,25 +3,40 @@
  * 工具类
  */
 import React from 'react';
-import {PixelRatio, Dimensions,ToastAndroid,StatusBar} from 'react-native';
+import {PixelRatio, Dimensions, ToastAndroid, StatusBar} from 'react-native';
 const Util = {
+    /**
+     * 获取设备的像素
+     */
     ratio: PixelRatio.get(),
+    /**
+     * 得到单位像素
+     */
     pixel: 1 / PixelRatio.get(),
+    /**
+     * 得到设备的尺寸信息
+     */
     size: {
         width: Dimensions.get('window').width,//得到屏幕的宽度
         height: Dimensions.get('window').height,//得到屏幕的高度
-        statusBarHeight:StatusBar.currentHeight//得到状态栏高度
+        statusBarHeight: StatusBar.currentHeight//得到状态栏高度
     },
+    /**
+     * 封装fetch，注意：data应为FormData类型
+     * @param url
+     * @param data
+     * @returns {Promise}
+     */
     post(url, data){
         let fetchOptions = {
             method: 'POST',
             headers: {
                 /*'Accept': 'application/json',
-                'Content-Type': 'application/json'*/
+                 'Content-Type': 'application/json'*/
             },
             body: data
         };
-       // console.warn(JSON.stringify(data));
+        // console.warn(JSON.stringify(data));
         return new Promise((resolve, reject) => {
             fetch(url, fetchOptions).then((response) => response.json()).then(
                 (responseJson) => {
@@ -32,7 +47,12 @@ const Util = {
             })
         });
     },
-    // 得到批量上传的所需的json,通过ajax上传到struts2中的action
+    /**
+     * 得到批量上传的所需的json,通过ajax上传到struts2中的action
+     * @param jsonArray
+     * @param str
+     * @returns {{}}
+     */
     getJsonForBatchUpload(jsonArray, str) {
         var strJSON = "{";
         var len = jsonArray.length;
@@ -61,9 +81,31 @@ const Util = {
         }
         return {}
     },
+    /**
+     * 得到批量上传的字符chuan
+     * @param jsonArray 原始数据
+     * @param propArray 哪些属性
+     */
+    getStringForBatchInsert(jsonArray, propArray){
+        let temp = []
+        for (let item of jsonArray) {
+            let str = "("
+            for (let index in propArray) {
+                let value = item[propArray[index]];
+                str += (value == 'undefined' || value == null ||value==''? "''" :"'"+ value+"'");
+                if (index != propArray.length - 1) {
+                    str += ','
+                } else {
+                    str += ')'
+                }
+            }
+            temp.push(str);
+        }
+        return temp.join(',');
+    },
     key: 'BDKHFSDKJFHSDKFHWEFH-REACT-NATIVE',
     showToast(msg){
-        ToastAndroid.show(msg,ToastAndroid.SHORT);
+        ToastAndroid.show(msg, ToastAndroid.SHORT);
     },
 
 }

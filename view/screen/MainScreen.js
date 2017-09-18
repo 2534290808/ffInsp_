@@ -11,6 +11,9 @@ import InspPage from "../insppage/InspPage";
 import DownloadPage from "../download/DownloadPage";
 import UploadPage from "../Upload/UploadPage";
 export default class MainScreen extends Component {
+    static navigationOptions={
+        header:null
+    }
     constructor() {
         super()
         this.state = {
@@ -28,8 +31,8 @@ export default class MainScreen extends Component {
 
     render() {
         return (<ScrollableView tabBarPosition="bottom" renderTabBar={this._renderTabBar}>
-            <InspPage tabLabel="1"/>
-            <DownloadPage tabLabel="2"/>
+            <InspPage tabLabel="1" navigation={this.props.navigation}/>
+            <DownloadPage tabLabel="2" navigation={this.props.navigation}/>
             <UploadPage tabLabel="3"/>
         </ScrollableView>)
     }
