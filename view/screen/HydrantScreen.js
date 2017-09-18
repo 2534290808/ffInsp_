@@ -8,7 +8,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import HydrantPage from "../insppage/HydrantPage";
 export default class HydrantScreen extends Component {
     static navigationOptions = {
-        title: 'Hydrant'
+        title: '消防栓'
     }
 
     render() {

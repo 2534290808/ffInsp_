@@ -13,15 +13,21 @@ import BuildingScreen from './view/screen/BuildingScreen';
 import FloorScreen from './view/screen/FloorScreen';
 import EquipmentScreen from './view/screen/EquipmentScreen';
 import HydrantScreen from './view/screen/HydrantScreen';
+import RollerDoorScreen from './view/screen/RollerDoorScreen';
 import Util from './view/Util';
 const App = StackNavigator({
-    'Main': {screen: MainScreen},
-    'QRScan':{screen:QRScanScreen},
-    'Building':{screen:BuildingScreen},
-    'Floor':{screen:FloorScreen},
-    'Equipment':{screen:EquipmentScreen},
-    Hydrant:{screen:HydrantScreen}
-}, {navigationOptions: {headerStyle: {backgroundColor:COLOR.cyan500,paddingTop:Util.size.statusBarHeight,height:80},
-    headerTitleStyle: {color: '#fff'},
-    headerTintColor: '#fff',}})
+    Main: {screen: MainScreen},
+    QRScan: {screen: QRScanScreen},
+    Building: {screen: BuildingScreen},
+    Floor: {screen: FloorScreen},
+    Equipment: {screen: EquipmentScreen},
+    Hydrant: {screen: HydrantScreen},
+    RollerDoor:{screen:RollerDoorScreen}
+}, {
+    navigationOptions: {
+        headerStyle: {backgroundColor: COLOR.cyan500, paddingTop: Util.size.statusBarHeight, height: 80},
+        headerTitleStyle: {color: '#fff'},
+        headerTintColor: '#fff',
+    }
+})
 export default App

@@ -17,20 +17,22 @@ export default class ListItemMenu extends Component {
         leftIconName:PropTypes.string,
         leftIconColor:PropTypes.string,
         divider:PropTypes.bool,
+        leftElement:PropTypes.any,
+        rightElement:PropTypes.any,
     }
     static defaultProps = {}
 
     render() {
-        let {primaryText, secondaryText, onActionSelected,leftIconName,leftIconColor,overflowIconName,actions,divider} = this.props
-        return (<ListItem divider={divider} leftElement={<Icon name={leftIconName} color={leftIconColor}/>} centerElement={<View
+        let {rightElement,primaryText, secondaryText, onActionSelected,leftIconName,leftIconColor,overflowIconName,actions,divider,leftElement} = this.props
+        return (<ListItem divider={divider} leftElement={!leftElement?<Icon name={leftIconName} color={leftIconColor}/>:leftElement} centerElement={<View
             style={styles.centerElement}><Text
             style={styles.listCenterTitle}>{primaryText}</Text><Text
             style={styles.rightText}>{secondaryText}</Text></View>}
-                          rightElement={<MaterialIcon.ToolbarAndroid
+                          rightElement={!rightElement?<MaterialIcon.ToolbarAndroid
                               onActionSelected={(index) => onActionSelected && onActionSelected(index)} iconColor="#fff"
                               overflowIconName={overflowIconName}
                               style={{height: 56, width: 56}}
-                              actions={actions}/>}/>)
+                              actions={actions}/>:rightElement}/>)
     }
 }
 const styles = StyleSheet.create({

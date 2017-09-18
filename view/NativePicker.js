@@ -37,13 +37,12 @@ export default class NativePicker extends Component {
 }
 const styles = StyleSheet.create({
     nativePicker: {
-        borderBottomWidth: 1,
-        borderBottomColor: '#ffcc03',
-        marginLeft: 16,
-        marginRight: 16,
+        borderBottomWidth: 0,
+        borderBottomColor: '#fff',
         flexDirection: 'row',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        marginLeft:16
     },
     nativePickerLabel: {fontSize: 17, color: '#000'}
 })
