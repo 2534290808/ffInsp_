@@ -18,7 +18,7 @@ export default class HydrantPage extends Component {
 
     render() {
         let {bleEnabled} = this.state;
-        return (<Container><BleState/></Container>)
+        return (<Container><BleState/> <Card></Card></Container>)
     }
 }
 const styles = StyleSheet.create({
