@@ -62,7 +62,7 @@ export default class DownloadPage extends Component {
      * @private
      */
     _onSearchClosed() {
-        this.setState({searching: false, willDownloadData: [], inputValue: null});
+        this.setState({searching: false, willDownloadData: [], inputValue: null,loading:false});
         psu.selectUnitInfo().then(res => {
             this.setState({downloadedData: res})
         }).catch(e => {

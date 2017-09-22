@@ -23,8 +23,9 @@ export default class SimpleToolBar extends Component {
     render() {
         let {title, actions, onActionSelected, containerStyle, overrideActionsToIcon, actionIconName, onIconPress} = this.props;
         return (<Card style={{container: containerStyle}}><View style={styles.cardView}><Text
-            style={styles.cardTitle}>{title}</Text>{overrideActionsToIcon ?<CircleButton onPress={onIconPress} iconName={actionIconName}/>
-           :
+            style={styles.cardTitle}>{title}</Text>{overrideActionsToIcon ?
+            <CircleButton onPress={onIconPress} iconName={actionIconName}/>
+            :
             <ToolbarAndroid style={{height: 56, width: 56}}
                             actions={actions}
                             onActionSelected={onActionSelected}/>}
@@ -39,5 +40,5 @@ const styles = {
         justifyContent: 'space-between',
         paddingVertical: 10
     },
-    cardTitle: {fontSize:16,color:'black'}
+    cardTitle: {fontSize: 16, color: 'black'}
 }

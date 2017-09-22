@@ -14,7 +14,7 @@ export default class QRScanView extends Component {
     }
    componentDidMount(){
         //模拟二维码扫描成功
-        setTimeout(()=>{if(this.props.barcodeReceived)this.props.barcodeReceived({data:'12345'});},2000);
+        setTimeout(()=>{if(this.props.barcodeReceived)this.props.barcodeReceived({data:'123456'});},2000);
    }
     render() {
         return (

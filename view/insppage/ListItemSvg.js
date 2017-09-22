@@ -18,14 +18,14 @@ export default class ListItemSvg extends Component {
 
     _renderButton() {
         let {onPress, buttonText} = this.props;
-        return <Button onPress={() => {
+        return buttonText?<Button onPress={() => {
             onPress && onPress()
-        }} style={{text: styles.rightText}} text={buttonText}/>
+        }} style={{text: styles.rightText}} text={buttonText}/>:null
     }
 
     render() {
         let {svgName, primaryText, secondaryText,} = this.props;
-        return (<ListItemMenu leftElement={<IconSvg name={svgName}/>} primaryText={primaryText}
+        return (<ListItemMenu leftElement={svgName && <IconSvg name={svgName}/>} primaryText={primaryText}
                               secondaryText={secondaryText}
                               rightElement={this._renderButton()}/>)
     }

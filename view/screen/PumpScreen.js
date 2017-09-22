@@ -4,13 +4,13 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import RollerDoor from "../insppage/RollerDoor";
-export default class RollerDoorScreen extends Component {
+import Pump from "../insppage/Pump";
+export default class PumpScreen extends Component {
     static navigationOptions = {
-        title: '消防门'
+        title: '水泵'
     }
 
     render() {
-        return (<RollerDoor navigation={this.props.navigation}/>)
+        return (<Pump navigation={this.props.navigation}/>)
     }
 }

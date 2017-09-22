@@ -12,6 +12,6 @@ export default class HydrantScreen extends Component {
     }
 
     render() {
-        return (<HydrantPage/>)
+        return (<HydrantPage navigation={this.props.navigation}/>)
     }
 }

@@ -10,5 +10,6 @@ const IconSvgProducer = {
     pressure2:{path:IconSvg.pressure2},
     "open-door":{path:IconSvg['open-door']},
     "close-door":{path:IconSvg['close-door']},
+    "run-time":{path:IconSvg['run-time']}
 }
 export default IconSvgProducer;

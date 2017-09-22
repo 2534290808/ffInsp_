@@ -10,7 +10,6 @@ import Util from '../Util';
 export default class WillDownLoadContent extends Component {
     constructor(props) {
         super(props)
-        this.state = {}
     }
 
     static propTypes = {
@@ -26,7 +25,7 @@ export default class WillDownLoadContent extends Component {
                 containerStyle={{marginVertical: Util.pixel}} key={index}
                 overrideActionsToIcon title={item.name} onIconPress={() => {
                 onPress && onPress({value: item.name, index: index})
-            }} actionIconName='arrow-downward'/>)}</View>)
+            }} actionIconName='file-download'/>)}</View>)
     }
 }
 const styles = StyleSheet.create({

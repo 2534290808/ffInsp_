@@ -11,9 +11,8 @@ const contextTypes = {
 };
 export default class AppBar extends Component {
     static propTypes = {
-        ...Toolbar.propTypes
+        ...Toolbar.propTypes,
     }
-
     render() {
         return (<View><View style={styles.status}/><StatusBar translucent backgroundColor='rgba(0,0,0,0.2)'/><Toolbar {...this.props}/></View>)
     }
