@@ -2,7 +2,7 @@
  * Created by lmy2534290808 on 2017/9/11.
  */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Button,ToastAndroid,DeviceEventEmitter} from 'react-native';
+import {StyleSheet, View, Text, Button, ToastAndroid, DeviceEventEmitter} from 'react-native';
 import PropTypes from 'prop-types';
 import Container from "../Container";
 import AppBar from "../AppBar";
@@ -15,6 +15,7 @@ let psu = new ProjectSqliteUtil();
 import Util from '../../view/Util';
 import Constants from '../../view/Constants';
 import Loading from "../Loading";
+import {Toast} from 'antd-mobile';
 export default class UploadPage extends Component {
     constructor() {
         super();
@@ -23,104 +24,171 @@ export default class UploadPage extends Component {
             pump: 0,
             rollerDoor: 0,
             other: 0,
-            visible:false
+            visible: false,
+            imgPathArray: []
+
         }
-        this._upload=this._upload.bind(this);
+        this._upload = this._upload.bind(this);
     }
 
     componentDidMount() {
-        psu.selectHydrantCount().then(number => this.setState({hydrant: number})).catch(e => e)
-        psu.selectPumpCount().then(number => this.setState({pump: number})).catch(e => e)
-        psu.selectRollerDoorCount().then(number => this.setState({rollerDoor: number})).catch(e => e)
-        psu.selectOtherCount().then(number => this.setState({other: number})).catch(e => e);
-        this.uploaded=DeviceEventEmitter.addListener('uploadDataSuccess',()=>{
-            let {hydrant,pump,rollerDoor,other}=this.state;
-                if(!hydrant && !pump && !rollerDoor && !other){
-                    ToastAndroid.show('上传成功',ToastAndroid.SHORT);
-                }
-       })
+        storage.load({key: 'imgPathArray'}).then(imgPathArray => this.setState({imgPathArray}));
+        psu.selectHydrantCount().then(number=>this.setState({hydrant:number}))
+        psu.selectPumpCount().then(number=>this.setState({pump:number}))
+        psu.selectRollerDoorCount().then(number=>this.setState({rollerDoor:number}))
+        psu.selectOtherCount().then(number=>this.setState({other:number}))
     }
-   componentWillUnmount(){
+
+    componentWillUnmount() {
         this.uploaded.remove();
-   }
+    }
+
     _uploadHydrant() {
+        return new Promise((resolve, reject) => {
             psu.getHydrants().then(data => {
                 if (data._parts.length > 0) {
                     Util.post(Constants.url.base + "/insertHydrants", data).then(res => {
-                        if(res.success>0){
-                           psu.deleteTable('hydrant').then(()=>{
-                               this.setState({hydrant:0});
-                               DeviceEventEmitter.emit('uploadDataSuccess')
-                           }).catch(e=>e)
+                        if (res.success > 0) {
+                            resolve();
+                        } else {
+                            reject()
                         }
-                    }).catch(e =>e)
-                }else{
-                    DeviceEventEmitter.emit('uploadDataSuccess')
+                    }).catch(e => {
+                        reject(e)
+                    })
+                } else {
+                    resolve();
                 }
-            }).catch(e =>e)
+            }).catch(e => reject(e))
+        })
     }
-    _uploadPump(){
+
+    _uploadPump() {
         return new Promise((resolve, reject) => {
             psu.getPumps().then(data => {
                 if (data._parts.length > 0) {
                     Util.post(Constants.url.base + "/insertPumps", data).then(res => {
-                        if(res.success>0){
+                        if (res.success > 0) {
                             resolve();
-                        }else{
+                        } else {
                             reject()
                         }
                     }).catch(e => {
                         reject(e)
                     })
-                }else{
+                } else {
                     resolve();
                 }
-            }).catch(e =>reject(e))
+            }).catch(e => reject(e))
         })
     }
-    _uploadRollerDoor(){
+
+    _uploadRollerDoor() {
         return new Promise((resolve, reject) => {
             psu.getRollerDoors().then(data => {
                 if (data._parts.length > 0) {
                     Util.post(Constants.url.base + "/insertRollerDoors", data).then(res => {
-                        if(res.success>0){
+                        if (res.success > 0) {
                             resolve();
-                        }else{
+                        } else {
                             reject()
                         }
                     }).catch(e => {
                         reject(e)
                     })
-                }else{
+                } else {
                     resolve();
                 }
-            }).catch(e =>reject(e))
+            }).catch(e => reject(e))
         })
     }
-    _uploadOther(){
+
+    _uploadOther() {
         return new Promise((resolve, reject) => {
             psu.getOthers().then(data => {
                 if (data._parts.length > 0) {
                     Util.post(Constants.url.base + "/insertOthers", data).then(res => {
-                        if(res.success>0){
+                        if (res.success > 0) {
                             resolve();
-                        }else{
+                        } else {
                             reject()
                         }
                     }).catch(e => {
                         reject(e)
                     })
-                }else{
+                } else {
                     resolve();
                 }
-            }).catch(e =>reject(e))
+            }).catch(e => reject(e))
         })
     }
-    _upload(){
-
+    _showLoading(){
+        Toast.loading('上传中...',0);
     }
+    _loadError(){
+        Toast.hide();
+        ToastAndroid.show('上传失败',ToastAndroid.LONG);
+    }
+    _loadSuccess(){
+        Toast.hide();
+        ToastAndroid.show('上传成功',ToastAndroid.LONG);
+    }
+    _upload() {
+        this._showLoading();
+        this._uploadHydrant().then(() => {
+            psu.deleteTable('hydrant')
+            this._uploadPump().then(() => {
+                psu.deleteTable('pump');
+                this._uploadRollerDoor().then(() => {
+                    psu.deleteTable('roller_door');
+                    this._uploadOther(() => {
+                        psu.deleteTable('other');
+                        this._uploadImages().then(() => {
+                             this._loadSuccess();
+                        })
+                    })
+                })
+            })
+        })
+    }
+
+    _uploadImages() {
+        return new Promise((resolve, reject) => {
+                let {imgPathArray}=this.state;
+                ToastAndroid.show('imgPathArray.length:'+imgPathArray.length,ToastAndroid.LONG);
+                if (imgPathArray.length == 0) {
+                    reject();
+                } else {
+                    let formData = new FormData();
+                    for (let i = 0; i < imgPathArray.length; i++) {
+                        let name = imgPathArray[i].slice(imgPathArray[i].lastIndexOf('/') + 1);
+                        let file = {uri: imgPathArray[i], type: 'multipart/form-data', name: name};
+                        formData.append("files", file);
+                    }
+                    fetch(Constants.url.base + "/filesUpload", {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                        body: formData,
+                    }).then((response) => response.json())
+                        .then((responseData) => {
+                            console.warn('success' + responseData.success);
+                            if(responseData.success>0){
+                                resolve()
+                            }else{
+                                reject();
+                            }
+                        }).catch((error) => {
+                        console.error('error', error);
+                        reject(error)
+                    });
+                }
+            })
+    }
+
     render() {
-        let {hydrant, pump, rollerDoor, other,visible} = this.state;
+        let {hydrant, pump, rollerDoor, other, visible} = this.state;
         return (<Container><AppBar centerElement="上传"/><Loading visible={visible}/>
             <CardContainer>
                 <Card containerStyle={styles.eleCard} titleStyle={styles.cardTitle} title="上传数据概况">

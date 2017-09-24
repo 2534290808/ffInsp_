@@ -2,7 +2,7 @@
  * Created by lmy2534290808 on 2017/9/15.
  */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Switch,ToastAndroid} from 'react-native';
+import {StyleSheet, View, Text, Switch, ToastAndroid,NativeAppEventEmitter} from 'react-native';
 import PropTypes from 'prop-types';
 import NativePicker from "../NativePicker";
 import {COLOR, Card, ListItem, Checkbox, IconToggle, Subheader, Icon, Button} from 'react-native-material-ui';
@@ -14,6 +14,8 @@ import ListItemSvg from "./ListItemSvg";
 import ListItemMDIcon from "./ListItemMDIcon";
 import ProjectSqliteUtil from '../../view/ProjectSqliteUtil';
 let psu = new ProjectSqliteUtil();
+import Util from '../../view/Util';
+import ImagePicker from 'react-native-image-crop-picker';
 export default class HydrantPage extends Component {
     constructor() {
         super();
@@ -22,55 +24,103 @@ export default class HydrantPage extends Component {
             sprayValue: 1,
             waterBlagValue: 1,
             egIntactValue: 1,
-            waterPressureDesc: '未完成',
-            imgPath: '',
-            waterPressureValue: 0,
-            vibrationCode:'',
+            imgNameArray: [],
+            waterPressureValue: '未完成',
+            vibrationCode: '',
+            imgPathArray: [],
+            bleAddress:''
         }
-        this._saveHydrant=this._saveHydrant.bind(this);
+        this._saveHydrant = this._saveHydrant.bind(this);
+        this._openCamera = this._openCamera.bind(this);
+        this._handleDidUpdateValue=this._handleDidUpdateValue.bind(this);
+        this._sendData=this._sendData.bind(this);
     }
 
     componentDidMount() {
-
+        storage.load({
+            key: 'imgPathArray'
+        }).then(imgPathArray => this.setState({imgPathArray}))
+        this.handleDidUpdateValueForCharacteristic=NativeAppEventEmitter.addListener('BleManagerDidUpdateValueForCharacteristic',this._handleDidUpdateValue)
+        storage.load({key:'bleAddress'}).then(bleAddress=>{
+            console.warn(bleAddress);
+            ToastAndroid.show(bleAddress+"---",ToastAndroid.SHORT);
+            this.setState({bleAddress:bleAddress});
+            Util.startBleNotify(bleAddress);
+        })
         // alert(this.props.navigation.state.params.qrCode)
     }
-
+    componentWillUnmount(){
+        this.handleDidUpdateValueForCharacteristic.remove();
+    }
+    _handleDidUpdateValue(args){
+        let value=args.value,len=value.length;
+        if(len>3){
+            let waterPressureValue=parseFloat(String.fromCharCode(...value.slice(0,4)));
+            this.setState({waterPressureValue})
+        }else{
+            this.setState({waterPressureValue:'获取失败'})
+        }
+        ToastAndroid.show(JSON.stringify(args),ToastAndroid.LONG);
+        console.warn(JSON.stringify(args))
+    }
     _changeValue(stateKey, value) {
         this.setState({[stateKey]: value})
     }
 
     _saveHydrant() {
-        let {sprayValue, waterPressureValue, imgPath, waterBlagValue, egIntactValue,vibrationCode} = this.state;
+        let {sprayValue, waterPressureValue, imgNameArray, waterBlagValue, egIntactValue, vibrationCode,imgPathArray} = this.state;
         let {qrCode} = this.props.navigation.state.params;
-        let params={
-            qrCode:qrCode,
-            img:imgPath,
-            video:'',
-            ensureWaterBag:waterBlagValue,
-            ensureSprayHead:sprayValue,
-            ensureEgIntact:egIntactValue,
-            waterPressure:waterPressureValue,
-            vibrationCode:vibrationCode,
+        let params = {
+            qrCode: qrCode,
+            img: imgNameArray.join('/'),
+            video: '',
+            ensureWaterBag: waterBlagValue,
+            ensureSprayHead: sprayValue,
+            ensureEgIntact: egIntactValue,
+            waterPressure: waterPressureValue,
+            vibrationCode: vibrationCode,
         }
+        storage.save({key: 'imgPathArray', data: imgPathArray})
         psu.insertHydrant(params).then(() => {
-            ToastAndroid.show('保存成功',ToastAndroid.LONG);
+            ToastAndroid.show('保存成功', ToastAndroid.LONG);
             this.props.navigation.goBack();
-               //window.alert('success')
+            //window.alert('success')
         }).catch(e => {
             console.warn(JSON.stringify(e))
         })
     }
 
+    _openCamera() {
+        ImagePicker.openCamera({
+            width: 300,
+            height: 400,
+            cropping: false
+        }).then(image => {
+            let {path} = image;
+            this.setState((preState,props)=>{
+                let {imgNameArray,imgPathArray}=preState;
+               imgNameArray.push(path.slice(path.lastIndexOf('/') + 1))
+                imgPathArray.push(path);
+                return {imgNameArray,imgPathArray}
+            })
+            console.warn(image);
+        });
+    }
+    _sendData(){
+        Util.sendBleCharData(this.state.bleAddress,'p').then(()=>{
+            this.setState({waterPressureValue:'获取中...'})
+        }).catch(e=>{this.setState({waterPressureValue:'获取失败'})})
+    }
     render() {
-        let {pickerData, sprayValue, waterBlagValue, egIntactValue, waterPressure} = this.state;
+        let {pickerData, sprayValue, waterBlagValue, egIntactValue, waterPressureValue} = this.state;
         let {imgPercentage} = this.props.navigation.state.params
         return (<Container>
             <CardContainer>
-                <ListItemSvg onPress={v => this._changeValue('waterPressure', 0.24)} svgName='pressure2'
-                             secondaryText={waterPressure} primaryText='水压' buttonText='获取'/>
+                <ListItemSvg onPress={this._sendData} svgName='pressure2'
+                             secondaryText={waterPressureValue} primaryText='水压' buttonText='获取'/>
                 {(Math.random() < imgPercentage) &&
-                <ListItemMDIcon onPress={v => {
-                }} iconName='insert-photo' secondaryText='未完成' primaryText='图片' buttonText='拍照'/>}
+                <ListItemMDIcon onPress={this._openCamera} iconName='insert-photo' secondaryText='未完成' primaryText='图片'
+                                buttonText='拍照'/>}
             </CardContainer>
             <CardContainer>
                 <NativePicker selectedValue={sprayValue} onValueChange={v => this._changeValue('sprayValue', v)}

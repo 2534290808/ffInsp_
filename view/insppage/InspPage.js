@@ -42,6 +42,11 @@ export default class InspPage extends Component {
     }
 
     componentDidMount() {
+        storage.load({key:'imgPathArray'}).then(imgPathArray=>{
+            console.warn(imgPathArray.join(',')+'---')
+        }).catch(e=>{
+            storage.save({key:'imgPathArray',data:[]})
+            console.warn(JSON.stringify(e))})
         //蓝牙初始化
         BleManager.start({showAlert: false, allowDuplicates: false});
         //蓝牙状态更新

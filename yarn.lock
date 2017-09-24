@@ -3918,6 +3918,10 @@ react-native-elements@^0.16.0:
     react-native-side-menu "^1.0.2"
     react-native-tab-navigator "^0.3.3"
 
+react-native-image-crop-picker@^0.16.1:
+  version "0.16.1"
+  resolved "https://registry.npmjs.org/react-native-image-crop-picker/-/react-native-image-crop-picker-0.16.1.tgz#37efb419276c691ac0f99d497ef787b53e652fc2"
+
 react-native-loading-w@^1.0.0:
   version "1.0.0"
   resolved "https://registry.npmjs.org/react-native-loading-w/-/react-native-loading-w-1.0.0.tgz#887d4133a31573485840b7c9395de073f7cdf849"
