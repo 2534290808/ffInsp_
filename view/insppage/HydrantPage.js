@@ -2,7 +2,7 @@
  * Created by lmy2534290808 on 2017/9/15.
  */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, Switch, ToastAndroid,NativeAppEventEmitter} from 'react-native';
+import {StyleSheet, View, Text, Switch, ToastAndroid,NativeAppEventEmitter,DeviceEventEmitter} from 'react-native';
 import PropTypes from 'prop-types';
 import NativePicker from "../NativePicker";
 import {COLOR, Card, ListItem, Checkbox, IconToggle, Subheader, Icon, Button} from 'react-native-material-ui';
@@ -28,7 +28,8 @@ export default class HydrantPage extends Component {
             waterPressureValue: '未完成',
             vibrationCode: '',
             imgPathArray: [],
-            bleAddress:''
+            bleAddress:'',
+            imgDesc:'未完成'
         }
         this._saveHydrant = this._saveHydrant.bind(this);
         this._openCamera = this._openCamera.bind(this);
@@ -47,6 +48,7 @@ export default class HydrantPage extends Component {
             this.setState({bleAddress:bleAddress});
             Util.startBleNotify(bleAddress);
         })
+        DeviceEventEmitter.emit('modalHide','')
         // alert(this.props.navigation.state.params.qrCode)
     }
     componentWillUnmount(){
@@ -56,6 +58,9 @@ export default class HydrantPage extends Component {
         let value=args.value,len=value.length;
         if(len>3){
             let waterPressureValue=parseFloat(String.fromCharCode(...value.slice(0,4)));
+            if(isNaN(waterPressureValue)){
+                Util.sendBleCharData(this.state.bleAddress,'b')
+            }
             this.setState({waterPressureValue})
         }else{
             this.setState({waterPressureValue:'获取失败'})
@@ -82,6 +87,7 @@ export default class HydrantPage extends Component {
         }
         storage.save({key: 'imgPathArray', data: imgPathArray})
         psu.insertHydrant(params).then(() => {
+            DeviceEventEmitter.emit('savedEvent','');
             ToastAndroid.show('保存成功', ToastAndroid.LONG);
             this.props.navigation.goBack();
             //window.alert('success')
@@ -89,7 +95,7 @@ export default class HydrantPage extends Component {
             console.warn(JSON.stringify(e))
         })
     }
-
+    //打开相机
     _openCamera() {
         ImagePicker.openCamera({
             width: 300,
@@ -103,23 +109,25 @@ export default class HydrantPage extends Component {
                 imgPathArray.push(path);
                 return {imgNameArray,imgPathArray}
             })
+            this.setState({imgDesc:'已完成'})
             console.warn(image);
         });
     }
+    //获取水压数据
     _sendData(){
         Util.sendBleCharData(this.state.bleAddress,'p').then(()=>{
             this.setState({waterPressureValue:'获取中...'})
         }).catch(e=>{this.setState({waterPressureValue:'获取失败'})})
     }
     render() {
-        let {pickerData, sprayValue, waterBlagValue, egIntactValue, waterPressureValue} = this.state;
+        let {pickerData, sprayValue, waterBlagValue, egIntactValue, waterPressureValue,imgDesc} = this.state;
         let {imgPercentage} = this.props.navigation.state.params
         return (<Container>
             <CardContainer>
                 <ListItemSvg onPress={this._sendData} svgName='pressure2'
                              secondaryText={waterPressureValue} primaryText='水压' buttonText='获取'/>
                 {(Math.random() < imgPercentage) &&
-                <ListItemMDIcon onPress={this._openCamera} iconName='insert-photo' secondaryText='未完成' primaryText='图片'
+                <ListItemMDIcon onPress={this._openCamera} iconName='insert-photo' secondaryText={imgDesc} primaryText='图片'
                                 buttonText='拍照'/>}
             </CardContainer>
             <CardContainer>

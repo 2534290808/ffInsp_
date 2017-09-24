@@ -317,7 +317,6 @@ export default class ProjectSqliteUtil extends Component {
                     formData.append(baseName + '.ensureWaterBag', row.ensure_water_bag);
                     formData.append(baseName + '.ensureSprayHead', row.ensure_spray_head);
                     formData.append(baseName + '.inspDate', row.insp_date);
-                    formData.append(baseName + '.ensureSpray', row.ensureSpray);
                     formData.append(baseName + '.vibrationCode', row.vibration_code);
                 }
                 resolve(formData)

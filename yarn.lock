@@ -3975,6 +3975,10 @@ react-native-side-menu@^1.0.2:
   dependencies:
     prop-types "^15.5.10"
 
+react-native-splash-screen@^3.0.1:
+  version "3.0.1"
+  resolved "https://registry.npmjs.org/react-native-splash-screen/-/react-native-splash-screen-3.0.1.tgz#178b29b7d848e6ee5a41fbb9c1299eb2b5aaa600"
+
 react-native-sqlite-storage@^3.3.3:
   version "3.3.3"
   resolved "https://registry.npmjs.org/react-native-sqlite-storage/-/react-native-sqlite-storage-3.3.3.tgz#670d5160806898d81ff8ce836666dca4c1fdac0e"

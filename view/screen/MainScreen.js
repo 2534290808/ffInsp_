@@ -10,6 +10,7 @@ import IconTabBar from "../IconTabBar";
 import InspPage from "../insppage/InspPage";
 import DownloadPage from "../download/DownloadPage";
 import UploadPage from "../Upload/UploadPage";
+import SplashScreen from 'react-native-splash-screen';
 let firstClick=0;
 export default class MainScreen extends Component {
     static navigationOptions={
@@ -27,6 +28,7 @@ export default class MainScreen extends Component {
     }
     componentDidMount(){
         BackHandler.addEventListener('hardwareBackPress',this._handleBack)
+        SplashScreen.hide();
     }
     componentWillUnmount(){
         BackHandler.removeEventListener('hardwareBackPress', this._handleBack)

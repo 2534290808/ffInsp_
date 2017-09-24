@@ -3,7 +3,7 @@
  * 巡检入口页面
  */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text, NativeAppEventEmitter, ToastAndroid, Modal} from 'react-native';
+import {StyleSheet, View, Text, NativeAppEventEmitter, ToastAndroid, Modal, DeviceEventEmitter} from 'react-native';
 import PropTypes from 'prop-types';
 import AppBar from "../AppBar";
 import Container from "../Container";
@@ -42,11 +42,15 @@ export default class InspPage extends Component {
     }
 
     componentDidMount() {
-        storage.load({key:'imgPathArray'}).then(imgPathArray=>{
-            console.warn(imgPathArray.join(',')+'---')
-        }).catch(e=>{
-            storage.save({key:'imgPathArray',data:[]})
-            console.warn(JSON.stringify(e))})
+        DeviceEventEmitter.addListener('modalHide', () => {
+            this._hideModal();
+        })
+        storage.load({key: 'imgPathArray'}).then(imgPathArray => {
+            console.warn(imgPathArray.join(',') + '---')
+        }).catch(e => {
+            storage.save({key: 'imgPathArray', data: []})
+            console.warn(JSON.stringify(e))
+        })
         //蓝牙初始化
         BleManager.start({showAlert: false, allowDuplicates: false});
         //蓝牙状态更新
@@ -126,7 +130,7 @@ export default class InspPage extends Component {
     _handleStopScan() {
         this.setState({scanning: false});
         Toast.hide();
-        ToastAndroid.show('未找到蓝牙',ToastAndroid.SHORT);
+        ToastAndroid.show('未找到蓝牙', ToastAndroid.SHORT);
     }
 
     _handleDisconnectPeripheral() {
@@ -151,7 +155,7 @@ export default class InspPage extends Component {
                     ToastAndroid.show('蓝牙已连接', ToastAndroid.SHORT);
                 } else {
                     if (!scanning) {
-                        Toast.loading('连接中...',0);
+                        Toast.loading('连接中...', 0);
                         BleManager.scan([], 5, true).then(() => {
                         })
                     }
@@ -220,24 +224,21 @@ export default class InspPage extends Component {
                 let {type, qrCode, imgPercentage} = res[0];
                 let routeName = type == 1 ? 'Hydrant' : type == 2 ? 'Pump' : type == 3 ? 'RollerDoor' : 'Other';
                 let open = type == 1 ? 'b' : type == 2 ? 'a' : '';
-                if (type == 1 || type == 2) {
+                if (open == 1 || open == 2) {
                     Util.sendBleCharData(this.state.bleAddress, open).then(() => {
-                        this._hideModal();
                         this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage})
-                    }).catch(e => {
-                        this._hideModal();
-                        ToastAndroid.show('蓝牙发生异常', ToastAndroid.SHORT)
                     })
                 } else {
-                    this._hideModal();
                     this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage})
+
                 }
+
+
             } else {
                 ToastAndroid.show('无法找到对应二维码', ToastAndroid.LONG);
             }
         }).catch(e => {
         })
-
     }
 
     render() {

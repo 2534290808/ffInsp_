@@ -25,24 +25,27 @@ export default class UploadPage extends Component {
             rollerDoor: 0,
             other: 0,
             visible: false,
-            imgPathArray: []
 
         }
         this._upload = this._upload.bind(this);
     }
 
     componentDidMount() {
-        storage.load({key: 'imgPathArray'}).then(imgPathArray => this.setState({imgPathArray}));
+        this._updateNum();
+        this.saved = DeviceEventEmitter.addListener('savedEvent',() =>{
+           this._updateNum();
+        })
+    }
+
+    componentWillUnmount() {
+        this.saved.remove();
+    }
+    _updateNum(){
         psu.selectHydrantCount().then(number=>this.setState({hydrant:number}))
         psu.selectPumpCount().then(number=>this.setState({pump:number}))
         psu.selectRollerDoorCount().then(number=>this.setState({rollerDoor:number}))
         psu.selectOtherCount().then(number=>this.setState({other:number}))
     }
-
-    componentWillUnmount() {
-        this.uploaded.remove();
-    }
-
     _uploadHydrant() {
         return new Promise((resolve, reject) => {
             psu.getHydrants().then(data => {
@@ -125,9 +128,9 @@ export default class UploadPage extends Component {
     _showLoading(){
         Toast.loading('上传中...',0);
     }
-    _loadError(){
+    _loadError(info){
         Toast.hide();
-        ToastAndroid.show('上传失败',ToastAndroid.LONG);
+        ToastAndroid.show('上传失败'+info,ToastAndroid.LONG);
     }
     _loadSuccess(){
         Toast.hide();
@@ -141,23 +144,25 @@ export default class UploadPage extends Component {
                 psu.deleteTable('pump');
                 this._uploadRollerDoor().then(() => {
                     psu.deleteTable('roller_door');
-                    this._uploadOther(() => {
+                    this._uploadOther().then(()=>{
                         psu.deleteTable('other');
                         this._uploadImages().then(() => {
-                             this._loadSuccess();
+                            storage.save({key:'imgPathArray',data:[]})
+                            this._updateNum();
+                            this._loadSuccess();
                         })
-                    })
-                })
-            })
-        })
+                    }).catch(e=>this._loadError('other'))
+                }).catch(e=>this._loadError('roller_door'))
+            }).catch(e=>this._loadError('pump'))
+        }).catch(e=>this._loadError('hydrant'))
     }
 
     _uploadImages() {
         return new Promise((resolve, reject) => {
-                let {imgPathArray}=this.state;
+            storage.load({key:'imgPathArray'}).then(imgPathArray=>{
                 ToastAndroid.show('imgPathArray.length:'+imgPathArray.length,ToastAndroid.LONG);
                 if (imgPathArray.length == 0) {
-                    reject();
+                    resolve();
                 } else {
                     let formData = new FormData();
                     for (let i = 0; i < imgPathArray.length; i++) {
@@ -184,6 +189,7 @@ export default class UploadPage extends Component {
                         reject(error)
                     });
                 }
+            })
             })
     }
 

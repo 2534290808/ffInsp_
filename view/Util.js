@@ -147,8 +147,9 @@ const Util = {
                         break;
                     }
                 }
-                BleManager.writeWithoutResponse(bleAddress, serviceUUID, characterUUID, [char.charCodeAt(0)]).then(() => {
+                BleManager.writeWithoutResponse(bleAddress, serviceUUID, characterUUID, [char.trim().charCodeAt(0)]).then(() => {
                     resolve();
+                    console.warn('写入成功')
                 }).catch((e) => reject(e))
             })
         })

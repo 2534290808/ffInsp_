@@ -8,19 +8,22 @@ import PropTypes from 'prop-types';
 import {QRScannerView} from 'ac-qrcode'
 import Util from '../Util';
 import {COLOR} from 'react-native-material-ui';
+let qrback=0;
 export default class QRScanView extends Component {
     static propTypes = {
         barcodeReceived: PropTypes.func.isRequired,//二维码扫描成功时触发
     }
    componentDidMount(){
+        qrback=0;
         //模拟二维码扫描成功
-        setTimeout(()=>{if(this.props.barcodeReceived)this.props.barcodeReceived({data:'123456'});},2000);
+       // setTimeout(()=>{if(this.props.barcodeReceived)this.props.barcodeReceived({data:'123456'});},2000);
    }
     render() {
         return (
             < QRScannerView
                 onScanResultReceived={(rec) => {
-                    this.props.barcodeReceived(rec)
+                    qrback++;
+                    if(qrback==1){ this.props.barcodeReceived(rec)}
                 }}
                 renderTopBarView={() => {
                 }}
