@@ -3,7 +3,7 @@
  */
 const Constants={
     url:{
-        base:'http://192.168.1.4:8080/FFInsp'
+        base:'http://192.168.124.6:8080/FFInsp'
     }
 }
 export default Constants;

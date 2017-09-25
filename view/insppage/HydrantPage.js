@@ -44,7 +44,7 @@ export default class HydrantPage extends Component {
         this.handleDidUpdateValueForCharacteristic=NativeAppEventEmitter.addListener('BleManagerDidUpdateValueForCharacteristic',this._handleDidUpdateValue)
         storage.load({key:'bleAddress'}).then(bleAddress=>{
             console.warn(bleAddress);
-            ToastAndroid.show(bleAddress+"---",ToastAndroid.SHORT);
+            //ToastAndroid.show(bleAddress+"---",ToastAndroid.SHORT);
             this.setState({bleAddress:bleAddress});
             Util.startBleNotify(bleAddress);
         })
@@ -65,7 +65,7 @@ export default class HydrantPage extends Component {
         }else{
             this.setState({waterPressureValue:'获取失败'})
         }
-        ToastAndroid.show(JSON.stringify(args),ToastAndroid.LONG);
+       // ToastAndroid.show(JSON.stringify(args),ToastAndroid.LONG);
         console.warn(JSON.stringify(args))
     }
     _changeValue(stateKey, value) {

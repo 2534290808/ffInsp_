@@ -26,10 +26,6 @@ export default class EquipmentPage extends Component {
         })
     }
 
-    _navigateScan() {
-        this.props.navigation.navigate('QRScan')
-    }
-
     render() {
         let {floor} = this.props.navigation.state.params;
         let {equipmentData} = this.state;
@@ -37,9 +33,7 @@ export default class EquipmentPage extends Component {
                                                                      containerStyle={styles.eleCardStyle}>
             <Subheader text="设备列表"/>
             {equipmentData.map((item, index) => <ListItem onPress={() => {
-            }} onRightElementPress={() => {
-                this._navigateScan()
-            }} key={index} centerElement={item.name} rightElement="crop-free"/>)}
+            }}  key={index} centerElement={item.name}/>)}
         </EleCard></Card>)
     }
 }

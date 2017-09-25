@@ -35,7 +35,7 @@ export default class Pump extends Component {
         this.handleDidUpdateValueForCharacteristic=NativeAppEventEmitter.addListener('BleManagerDidUpdateValueForCharacteristic',this._handleDidUpdateValue)
         storage.load({key:'bleAddress'}).then(bleAddress=>{
             console.warn(bleAddress);
-            ToastAndroid.show(bleAddress+"---",ToastAndroid.SHORT);
+           // ToastAndroid.show(bleAddress+"---",ToastAndroid.SHORT);
             this.setState({bleAddress:bleAddress});
             Util.startBleNotify(bleAddress);
         })
@@ -46,7 +46,7 @@ export default class Pump extends Component {
     }
     _handleDidUpdateValue(args){
         console.warn(JSON.stringify(args));
-        ToastAndroid.show('通知了',ToastAndroid.SHORT)
+       // ToastAndroid.show('通知了',ToastAndroid.SHORT)
         let value = args.value,len=value.length;
         if(len==12) {
             let time = value.slice(1, 9),card = [value[9], value[10], value[11]];

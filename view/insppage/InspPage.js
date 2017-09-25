@@ -223,17 +223,19 @@ export default class InspPage extends Component {
             if (res.length > 0) {
                 let {type, qrCode, imgPercentage} = res[0];
                 let routeName = type == 1 ? 'Hydrant' : type == 2 ? 'Pump' : type == 3 ? 'RollerDoor' : 'Other';
-                let open = type == 1 ? 'b' : type == 2 ? 'a' : '';
-                if (open == 1 || open == 2) {
-                    Util.sendBleCharData(this.state.bleAddress, open).then(() => {
-                        this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage})
-                    })
-                } else {
-                    this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage})
-
+                switch (type) {
+                    case 1:
+                        Util.sendBleCharData(this.state.bleAddress, 'b').then(() => {
+                            this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage})
+                        });
+                        break;
+                    case 2:
+                        Util.sendBleCharData(this.state.bleAddress, 'a').then(() => {
+                            this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage})
+                        });
+                        break;
+                    default:this.props.navigation.navigate(routeName, {type, qrCode, imgPercentage});break;
                 }
-
-
             } else {
                 ToastAndroid.show('无法找到对应二维码', ToastAndroid.LONG);
             }
