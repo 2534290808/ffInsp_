@@ -109,10 +109,12 @@ export default class DownloadPage extends Component {
                         this.setState({downloading: false})
                         Util.showToast('下载成功')
                     }).catch(e => {
+                        this.setState({downloading: false})
                         Util.showToast('下载失败');
                         console.warn(JSON.stringify(e))
                     })
                 }).catch(e => {
+                    this.setState({downloading: false})
                     Util.showToast('下载失败');
                     console.warn(JSON.stringify(e))
                 })
