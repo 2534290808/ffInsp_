@@ -120,9 +120,15 @@ const Util = {
                     let serviceUUID, characterUUID;
                     for (var item of info.characteristics) {
                         let {Notify} = item.properties;
-                        if (Notify) {
+                        /*if (Notify) {
                             serviceUUID = item.service;
                             characterUUID = item.characteristic;
+                            break;
+                        }*/
+                        let {characteristic}=item;
+                        if(characteristic==='fee1'){
+                            serviceUUID = item.service;
+                            characterUUID = characteristic;
                             break;
                         }
                     }
@@ -141,9 +147,16 @@ const Util = {
                 let serviceUUID, characterUUID;
                 for (var item of info.characteristics) {
                     let {Notify, WriteWithoutResponse} = item.properties;
-                    if (WriteWithoutResponse && Notify) {
+                    /*if (WriteWithoutResponse && Notify) {
                         serviceUUID = item.service;
                         characterUUID = item.characteristic
+                        break;
+                    }*/
+                    let {characteristic}=item;
+                    if(characteristic=="fee2"){
+                        console.log('得到fee2')
+                        serviceUUID=item.service;
+                        characterUUID=characteristic;
                         break;
                     }
                 }
