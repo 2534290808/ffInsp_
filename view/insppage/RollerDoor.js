@@ -65,7 +65,7 @@ export default class RollerDoor extends Component {
         } else {
             ToastAndroid.show('数据获取失败', ToastAndroid.LONG);
         }
-        ToastAndroid.show(JSON.stringify(args), ToastAndroid.LONG)
+       // ToastAndroid.show(JSON.stringify(args), ToastAndroid.LONG)
     }
 
     _saveRollerDoor() {

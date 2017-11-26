@@ -130,7 +130,7 @@ export default class UploadPage extends Component {
     }
     _loadError(info){
         Toast.hide();
-        ToastAndroid.show('上传失败'+info,ToastAndroid.LONG);
+        ToastAndroid.show('上传失败',ToastAndroid.LONG);
     }
     _loadSuccess(){
         Toast.hide();
@@ -160,7 +160,7 @@ export default class UploadPage extends Component {
     _uploadImages() {
         return new Promise((resolve, reject) => {
             storage.load({key:'imgPathArray'}).then(imgPathArray=>{
-                ToastAndroid.show('imgPathArray.length:'+imgPathArray.length,ToastAndroid.LONG);
+               // ToastAndroid.show('imgPathArray.length:'+imgPathArray.length,ToastAndroid.LONG);
                 if (imgPathArray.length == 0) {
                     resolve();
                 } else {
@@ -200,7 +200,7 @@ export default class UploadPage extends Component {
                 <Card containerStyle={styles.eleCard} titleStyle={styles.cardTitle} title="上传数据概况">
                     <ListItem centerElement='消火栓' rightElement={<Text>{'数据量：' + hydrant}</Text>}/>
                     <ListItem centerElement='水泵' rightElement={<Text>{'数据量：' + pump}</Text>}/>
-                    <ListItem centerElement='消防门' rightElement={<Text>{'数据量：' + rollerDoor}</Text>}/>
+                    <ListItem centerElement='防火门' rightElement={<Text>{'数据量：' + rollerDoor}</Text>}/>
                     <ListItem centerElement='其他类' rightElement={<Text>{'数据量：' + other}</Text>}/>
                 </Card>
             </CardContainer>

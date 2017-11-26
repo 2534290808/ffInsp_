@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import RollerDoor from "../insppage/RollerDoor";
 export default class RollerDoorScreen extends Component {
     static navigationOptions = {
-        title: '消防门'
+        title: '防火门'
     }
 
     render() {
