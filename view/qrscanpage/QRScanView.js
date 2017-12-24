@@ -5,7 +5,7 @@
 import React, {Component} from 'react';
 import {StyleSheet, View, Text} from 'react-native';
 import PropTypes from 'prop-types';
-import {QRScannerView} from 'react-native-android-barcodescanner'
+import QRScannerView from 'react-native-android-barcodescanner'
 import Util from '../Util';
 import {COLOR} from 'react-native-material-ui';
 let qrback=0;
