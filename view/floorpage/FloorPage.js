@@ -2,7 +2,7 @@
  * Created by lmy2534290808 on 2017/9/14.
  */
 import React, {Component} from 'react';
-import {StyleSheet, View, Text} from 'react-native';
+import {StyleSheet, View, Text,ScrollView} from 'react-native';
 import PropTypes from 'prop-types';
 import {Card,ListItem,Subheader} from 'react-native-material-ui';
 import {Card as EleCard, Button} from 'react-native-elements';
@@ -30,8 +30,10 @@ export default class FloorPage extends Component {
         return (<Card style={{container: styles.cardStyle}}><EleCard title={building} titleStyle={{fontSize:20}}
                     containerStyle={styles.eleCardStyle}>
             <Subheader text="楼层列表"/>
+            <ScrollView>
             {floorData.map((item,index)=><ListItem onRightElementPress={()=>{this._navigateFloor(item.name)}} onPress={()=>{this._navigateFloor(item.name)}} key={index} centerElement={item.name} rightElement="arrow-forward"/>)}
-        </EleCard></Card>)
+            </ScrollView>
+            </EleCard></Card>)
     }
 }
 const styles = StyleSheet.create({
