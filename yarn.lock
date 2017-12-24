@@ -3861,6 +3861,10 @@ react-devtools-core@^2.5.0:
     shell-quote "^1.6.1"
     ws "^2.0.3"
 
+react-native-android-barcodescanner@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.npmjs.org/react-native-android-barcodescanner/-/react-native-android-barcodescanner-0.1.5.tgz#17b4120a1136671641c291bcf672ecd8abc3f64c"
+
 react-native-animatable@^1.2.3:
   version "1.2.3"
   resolved "https://registry.npmjs.org/react-native-animatable/-/react-native-animatable-1.2.3.tgz#d0f0bd694833b934f3aaa1275739228b786ecb4b"
@@ -3875,9 +3879,9 @@ react-native-camera-roll-picker@~1.2.0:
   version "1.2.0"
   resolved "https://registry.npmjs.org/react-native-camera-roll-picker/-/react-native-camera-roll-picker-1.2.0.tgz#f479ad27e5b0962b9049bd16669de9b59f91df5c"
 
-react-native-camera@^0.10.0:
-  version "0.10.0"
-  resolved "https://registry.npmjs.org/react-native-camera/-/react-native-camera-0.10.0.tgz#5d973c9a8aab95f68aede395ba310eae0c3cecdd"
+react-native-camera@^0.12.0:
+  version "0.12.0"
+  resolved "http://registry.npm.taobao.org/react-native-camera/download/react-native-camera-0.12.0.tgz#51afa8acf1696d9d973074b6454c5ba2cce6ac18"
   dependencies:
     prop-types "^15.5.10"
 
