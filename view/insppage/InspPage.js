@@ -222,7 +222,7 @@ export default class InspPage extends Component {
         psu.selectTypeByQRCode(rec.data).then(res => {
             if (res.length > 0) {
                 let {type, qrCode, imgPercentage} = res[0];
-                let routeName = type == 1 ? 'Hydrant' : type == 2 ? 'Pump' : type == 3 ? 'RollerDoor' : 'Other';
+                let routeName = type == 1 ? 'Hydrant' : type == 2 ? 'Envi' : type == 3 ? 'RollerDoor' : 'Other';
                 switch (type) {
                     case 1:
                         Util.sendBleCharData(this.state.bleAddress, 'b').then(() => {

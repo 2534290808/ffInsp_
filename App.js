@@ -19,6 +19,7 @@ import Pump from "./view/insppage/Pump";
 import Other from "./view/insppage/Other";
 import OtherScreen from "./view/screen/OtherScreen";
 import PumpScreen from "./view/screen/PumpScreen";
+import HumitureScreen from "./view/screen/HumitureScreen";
 const App = StackNavigator({
     Main: {screen: MainScreen},
     QRScan: {screen: QRScanScreen},
@@ -28,7 +29,8 @@ const App = StackNavigator({
     Hydrant: {screen: HydrantScreen},
     RollerDoor:{screen:RollerDoorScreen},
     Pump:{screen:PumpScreen},
-    Other:{screen:OtherScreen}
+    Other:{screen:OtherScreen},
+    Envi:{screen:HumitureScreen}
 }, {
     navigationOptions: {
         headerStyle: {backgroundColor: COLOR.cyan500, paddingTop: Util.size.statusBarHeight, height: 80},
